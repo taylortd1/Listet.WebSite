@@ -1,5 +1,7 @@
-﻿using Listet.WebSite.Services;
+﻿using Listet.WebSite.Models;
+using Listet.WebSite.Services;
 using Microsoft.Extensions.FileProviders;
+using System.Text.Json;
 
 namespace Listet.WebSite;
 
@@ -23,9 +25,14 @@ public class Startup
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     // This method is called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder? app, IWebHostEnvironment env)
     {
         //this is where we add the json file product service
+        if (app == null)
+        {
+            throw new ArgumentNullException(nameof(app));
+        }
+
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -47,6 +54,17 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();
+            endpoints.MapGet("/products", (context) =>
+            {
+                //gets the json file product service
+                var products = app.ApplicationServices.GetService<JsonFileProductService>().GetProducts();
+                
+                //creates a json string from the products
+                var json = JsonSerializer.Serialize(products);
+                
+                //writes the json string to the response
+                return context.Response.WriteAsync(json);
+            });
         });
     }       
 }

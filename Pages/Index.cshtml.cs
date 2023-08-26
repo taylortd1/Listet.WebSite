@@ -9,9 +9,10 @@ namespace Listet.WebSite.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         public JsonFileProductService ProductService;
-        public IEnumerable<Product> Products { get; private set; }
+        //dereference the products 
+        public IEnumerable<Product> Products { get; set; }
 
-        public  IndexModel(ILogger<IndexModel> logger, JsonFileProductService productService)
+        public IndexModel(ILogger<IndexModel> logger, JsonFileProductService productService)
         {
             _logger = logger;
             ProductService = productService;

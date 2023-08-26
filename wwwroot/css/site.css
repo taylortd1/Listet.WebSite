@@ -152,7 +152,7 @@ ul {
 }
 
 .footer {
-    position: absolute;
+    position: center;
     bottom: 0;
     width: 100%;
     white-space: nowrap;
@@ -172,4 +172,9 @@ ul {
     background: -o-linear-gradient(110deg, #252152 60%, #e9a8a6 60%);
     background: -moz-linear-gradient(110deg, #252152 60%, #e9a8a6 60%);
     background: linear-gradient(110deg, #252152 60%, #e9a8a6 60%);
+}
+
+.container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+    max-width: 1320px;
+    text-align: left;
 }

@@ -3,6 +3,7 @@ using System.Text.Json;
 
 namespace Listet.WebSite.Services;
 
+//Add a web api for products
 public class JsonFileProductService
 {
     public JsonFileProductService(IWebHostEnvironment webHostEnvironment)
@@ -18,13 +19,13 @@ public class JsonFileProductService
     //this method retrieves the products from the json file
     public IEnumerable<Product> GetProducts()
     {
-        using (var jsonFileReader = File.OpenText(JsonFileName))
-        {
-            return JsonSerializer.Deserialize<Product[]>(jsonFileReader.ReadToEnd(),
-                new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                })!;
-        }
+
+        using var jsonFileReader = File.OpenText(JsonFileName);
+        return JsonSerializer.Deserialize<Product[]>(jsonFileReader.ReadToEnd(),
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            })!;
+        
     }
 }
