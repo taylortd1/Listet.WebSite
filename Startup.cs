@@ -2,6 +2,8 @@
 using Listet.WebSite.Services;
 using Microsoft.Extensions.FileProviders;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+using Listet.WebSite.Controllers;
 
 namespace Listet.WebSite;
 
@@ -20,6 +22,7 @@ public class Startup
     {
         //this is where we add the json file product service
         services.AddRazorPages();
+        services.AddControllers();
         services.AddTransient<JsonFileProductService>();
     }
 
@@ -54,17 +57,20 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapRazorPages();
-            endpoints.MapGet("/products", (context) =>
-            {
-                //gets the json file product service
-                var products = app.ApplicationServices.GetService<JsonFileProductService>().GetProducts();
+            endpoints.MapControllers();
+
+            /* old way to covert html to json in web browser*/
+            //endpoints.MapGet("/products", (context) =>
+            //{
+            //    //gets the json file product service
+            //    var products = app.ApplicationServices.GetRequiredService<JsonFileProductService>().GetProducts();
                 
-                //creates a json string from the products
-                var json = JsonSerializer.Serialize(products);
+            //    //creates a json string from the products
+            //    var json = JsonSerializer.Serialize<IEnumerable<Product>>(products);
                 
-                //writes the json string to the response
-                return context.Response.WriteAsync(json);
-            });
+            //    //writes the json string to the response
+            //    return context.Response.WriteAsync(json);
+            //});
         });
     }       
 }

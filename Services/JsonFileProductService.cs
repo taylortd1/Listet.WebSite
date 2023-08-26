@@ -11,15 +11,16 @@ public class JsonFileProductService
         WebHostEnvironment = webHostEnvironment;
     }
 
-    public IWebHostEnvironment WebHostEnvironment { get; }
+    public IWebHostEnvironment WebHostEnvironment { get; set; }
 
     //many web paths are case sensitive, so we need to make sure we get the case right
-    private string JsonFileName => Path.Combine(WebHostEnvironment.WebRootPath, "data", "products.json");
+    private string JsonFileName => Path.Combine(WebHostEnvironment.WebRootPath, "Data", "products.json");
 
     //this method retrieves the products from the json file
     public IEnumerable<Product> GetProducts()
     {
 
+        Console.WriteLine(JsonFileName);
         using var jsonFileReader = File.OpenText(JsonFileName);
         return JsonSerializer.Deserialize<Product[]>(jsonFileReader.ReadToEnd(),
             new JsonSerializerOptions
