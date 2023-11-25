@@ -27,13 +27,15 @@
     border-radius: 0 0 10px 10px;
     
 }
-    .card-columns .card {
-        opacity: .9;
-        margin: 0px;
-        margin-bottom: 15px;
-        color: #a9a9a9;
-        border-radius: 10px 10px 10px 10px;
-    }
+
+.card-columns .card {
+    opacity: .9;
+    margin: 0px;
+    margin-bottom: 15px;
+    color: #a9a9a9;
+    border-radius: 10px 10px 10px 10px;
+}
+
 .card-columns .card-img {
     
     height: 330px;
@@ -54,10 +56,11 @@
     font-weight: bold;
     
 }
+
 .modal .card-img {
     height: 500px;
     vertical-align: bottom;
-    background-position: center; /* Center the image */
+    position: absolute; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover; /* Resize the background image to cover the entire container */
     border-radius: 10px 10px 0px 0px;

@@ -1,32 +1,62 @@
-﻿using Listet.WebSite.Models;
-using System.Text.Json;
+﻿using System.Text.Json;
+using Listet.WebSite.Models;
+
+
 
 namespace Listet.WebSite.Services;
 
-//Add a web api for products
-public class JsonFileProductService
+
+public class JsonFileProductService : Product
 {
+    public IWebHostEnvironment WebHostEnvironment { get; }
+    
     public JsonFileProductService(IWebHostEnvironment webHostEnvironment)
     {
         WebHostEnvironment = webHostEnvironment;
     }
 
-    public IWebHostEnvironment WebHostEnvironment { get; set; }
+    private string JsonFileName => Path.Combine(WebHostEnvironment!.WebRootPath, "data", "products.json");
 
-    //many web paths are case sensitive, so we need to make sure we get the case right
-    private string JsonFileName => Path.Combine(WebHostEnvironment.WebRootPath, "Data", "products.json");
-
-    //this method retrieves the products from the json file
     public IEnumerable<Product> GetProducts()
     {
 
-        Console.WriteLine(JsonFileName);
-        using var jsonFileReader = File.OpenText(JsonFileName);
-        return JsonSerializer.Deserialize<Product[]>(jsonFileReader.ReadToEnd(),
-            new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            })!;
+
         
+        using var jsonFileReader = File.OpenText(JsonFileName);
+        
+
+        Product[]? products = JsonSerializer.Deserialize<Product[]>(jsonFileReader.ReadToEnd(),
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+        return products!;
+    }
+
+    public void AddRating(string productId, int rating)
+    {
+        var products = GetProducts();
+
+        if (products.First(x => x.Id == productId).Ratings == null)
+        {
+            products.First(x => x.Id == productId).Ratings = new int[] { rating };
+        }
+        else
+        {
+            var ratings = products.First(x => x.Id == productId).Ratings?.ToList();
+            ratings?.Add(rating);
+            products.First(x => x.Id == productId).Ratings = ratings?.ToArray();
+        }
+
+        using var outputStream = File.OpenWrite(JsonFileName);
+
+        JsonSerializer.Serialize<IEnumerable<Product>>(
+            new Utf8JsonWriter(outputStream, new JsonWriterOptions
+            {
+                SkipValidation = true,
+                Indented = true
+            }),
+            products
+        );
     }
 }

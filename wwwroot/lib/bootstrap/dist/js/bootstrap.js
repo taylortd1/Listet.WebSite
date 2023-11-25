@@ -593,8 +593,9 @@
       }
 
       if (isNative) {
-        evt = document.createEvent('HTMLEvents');
-        evt.initEvent(typeEvent, bubbles, true);
+        //evt = document.createEvent('HTMLEvents');
+          //evt.initEvent(typeEvent, bubbles, true);
+          evt = new Event('HTMLEvents', { bubbles: true, cancelable: true });
       } else {
         evt = new CustomEvent(event, {
           bubbles,
@@ -997,8 +998,8 @@
     offset(element) {
       const rect = element.getBoundingClientRect();
       return {
-        top: rect.top + window.pageYOffset,
-        left: rect.left + window.pageXOffset
+          top: rect.top + window.ScrollY,
+          left: rect.left + window.scrollX
       };
     },
 
